@@ -1,3 +1,6 @@
 go 1.20
 
-use ./context/withCancel
+use (
+	./context/withCancel
+	./context/withTimeout
+)

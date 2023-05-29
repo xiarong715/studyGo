@@ -12,7 +12,7 @@ func main() {
 
 	go func() {
 		time.Sleep(time.Second * 1) // 执行1s
-		cancel()                    // 发送取消信号（关闭channel）
+		cancel()                    // 发送取消信号（关闭channel），可能在发送取消信号前就超时了
 	}()
 
 	select {

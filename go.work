@@ -3,4 +3,6 @@ go 1.20
 use (
 	./context/withCancel
 	./context/withTimeout
+	./iota
+	./slice
 )

@@ -1,8 +1,15 @@
 go 1.20
 
 use (
+	./array
 	./context/withCancel
 	./context/withTimeout
+	./for
+	./func
 	./iota
+	./map
+	./pointer
+	./rune
 	./slice
+	./switch
 )

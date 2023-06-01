@@ -8,6 +8,7 @@ use (
 	./func
 	./iota
 	./map
+	./pathtest
 	./pointer
 	./rune
 	./slice

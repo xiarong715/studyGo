@@ -2,15 +2,31 @@ go 1.20
 
 use (
 	./array
+	./atomtic/value
 	./context/withCancel
 	./context/withTimeout
+	./file
 	./for
 	./func
+	./http/firsthttp
+	./inherit/combinationinterface
+	./inherit/combinationstruct
+	./inherit/testinherit
+	./interface/retv
+	./interface/usb
 	./iota
+	./json2struct
+	./jwt
+	./makeToken
 	./map
 	./pathtest
 	./pointer
 	./rune
 	./slice
+	./struct2json
 	./switch
+	./sync/datarace
+	./sync/mutex
+	./sync/rwmutex
+	./timer
 )

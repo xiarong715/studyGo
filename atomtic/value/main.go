@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 var muser atomic.Value
@@ -16,6 +18,7 @@ var gUserFile *os.File
 var gTokenFile *os.File
 
 // var gChData chan chdata
+var m = sync.Mutex{}
 
 type UserManagerJSON struct {
 	Users  map[string]User   `json:"users"`
@@ -102,7 +105,7 @@ func tokensGet() map[string]string {
 	return m2
 }
 
-func SaveJSON11(tag string, ch chan<- chdata) error {
+func SaveJSON11(tag string, ch chan chdata) error {
 	switch tag {
 	case "USERS":
 		users := usersGet()
@@ -126,8 +129,9 @@ func SaveJSON11(tag string, ch chan<- chdata) error {
 	}
 }
 
-func SaveJSON(tag string, data []byte, ch chan<- chdata) error {
+func SaveJSON(tag string, data []byte, ch chan chdata) error {
 	ch <- chdata{Tag: tag, Data: data}
+	go RoutingSaveToFile(ch)
 	return nil
 }
 
@@ -147,6 +151,10 @@ func SaveToFile(data chdata) error {
 }
 
 func Save(file *os.File, data []byte) error {
+	m.Lock()
+	defer m.Unlock()
+
+	file.Seek(0, io.SeekStart)
 	file.Truncate(0)
 	_, err := file.Write(data)
 	if err != nil {
@@ -162,6 +170,7 @@ type chdata struct {
 }
 
 func RoutingSaveToFile(ch <-chan chdata) { // 只能接收
+	wg.Add(1)
 	for data := range ch { // for { select {}}
 		fmt.Println("routing save to file")
 		SaveToFile(data)
@@ -188,11 +197,15 @@ func main() {
 
 	gChData := make(chan chdata, 10)
 
-	SaveJSON11("USERS", gChData)
-	SaveJSON11("TOKENS", gChData)
+	func() {
+		for {
+			SaveJSON11("USERS", gChData)
+			SaveJSON11("TOKENS", gChData)
+			time.Sleep(time.Second * 2)
+		}
+	}()
 
-	wg.Add(1)
-	go RoutingSaveToFile(gChData)
+	// go RoutingSaveToFile(gChData)
 
 	wg.Wait()
 }

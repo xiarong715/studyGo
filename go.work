@@ -3,6 +3,7 @@ go 1.20
 use (
 	./array
 	./atomtic/value
+	./chan/chat
 	./context/withCancel
 	./context/withTimeout
 	./file
@@ -18,9 +19,11 @@ use (
 	./json2struct
 	./jwt
 	./makeToken
-	./map
+	./map/multireadwrite
+	./map/test
 	./pathtest
 	./pointer
+	./routine/worker4
 	./rune
 	./slice
 	./struct2json
